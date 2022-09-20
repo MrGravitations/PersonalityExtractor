@@ -1,13 +1,17 @@
-import re
-import time
-import svm
+import warnings
 
-import numpy as np
-import joblib
-from bert_serving.client import BertClient
-import os.path
-from joblib import dump, load
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore",category=DeprecationWarning)
+    import re
+    import time
+    import svm
+    import pandas as pd
 
+    import numpy as np
+    import joblib
+    from bert_serving.client import BertClient
+    import os.path
+    from joblib import dump, load
 
 def shrink_text(text, clean_string=True):
     status = []
@@ -147,13 +151,9 @@ def predict_with_model(embeddings, l=0):
         else:
              classifier, _, _, _ = svm.classify("essays_mairesse_sb_tokenized_200_max_rev_vector.p", y, -1, 0, add_mairesse=False)
              dump(classifier, model_file_name)
-        predicts = classifier.predict(embeddings4layers)
-        mean = np.mean(predicts)
-        if mean != 0.5:
-            results.append(np.round(np.mean(mean)))
-        else:
-            results.append(classifier.predict([np.mean(embeddings4layers, axis=0)])[0])
-
+        predicts = classifier.predict_proba(embeddings4layers)[:,1]
+        mean = np.max(predicts)
+        results.append(mean)
     return results
 
 
@@ -167,6 +167,14 @@ def predict(text):
 
 
 if __name__ == "__main__":
-    x = input("Enter a new text:")
-    predictions = predict(x)
-    print("The prediction for EXT, NEU, AGR, CON, OPN : ", predictions)
+    text_input = pd.read_csv('/content/PersonalityExtractor/DataSetCOMPLETE.csv')
+    txt_input = text_input['text'].iloc[1:5]
+    li = []
+    for i in txt_input:
+      x = i
+      predictions = predict(x)
+      print(predictions)
+      li.append(predictions) 
+      output = pd.DataFrame()
+      output = pd.DataFrame(li)
+    outputCSV = output.to_csv('/content/PersonalityExtractor/DataSetBIG5.csv', encoding='utf-8', index=False)

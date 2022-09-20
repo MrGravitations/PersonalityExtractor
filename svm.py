@@ -1,11 +1,14 @@
-import time
+import warnings
 
-import joblib
-import numpy as np
-from sklearn import svm
-from sklearn.ensemble import BaggingClassifier
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore",category=DeprecationWarning)
+    import time
 
-
+    import joblib
+    import numpy as np
+    from sklearn import svm
+    from sklearn.ensemble import BaggingClassifier
+    
 def read_bert_mode(addr, attr, fold, l, add_mairesse):
     revs, vocab, mairesse = joblib.load(addr)
 
@@ -33,7 +36,7 @@ def classify(path, y, cv, layer=0, add_mairesse=True):
     start = time.time()
     X_train, X_test, y_train, y_test, y_test_names = read_bert_mode(path, y, cv, layer, add_mairesse)
 
-    classifier = BaggingClassifier(svm.SVC(gamma="scale"), n_jobs=-1)  # this line is for BB-SVM
+    classifier = BaggingClassifier(svm.SVC(gamma="scale", probability=True), n_jobs=-1)  # this line is for BB-SVM
     # classifier = svm.SVC(gamma="scale")  # this line is for BB-SVM without bagging
     classifier.fit(X_train, y_train)
     end = time.time()

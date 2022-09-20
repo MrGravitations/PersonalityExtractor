@@ -85,7 +85,7 @@ def build_data_cv(datafile, cv=10, clean_string=True):
 
 
 def build_new_data(revs):
-    with open("E:\Thesis\personality_detection-main\essays_original_splitted.csv", "w") as output:
+    with open("/content/PersonalityExtractor/essays_original_splitted.csv", "w") as output:
         output.write("#AUTHID,TEXT,cEXT,cNEU,cAGR,cCON,cOPN,split\n")
         x = False
         xs = []
@@ -138,5 +138,5 @@ def clean_str(string, TREC=False):
 
 
 if __name__ == "__main__":
-    x, y = build_data_cv("E:\Thesis\personality_detection-main\essays_original_splitted.csv")
+    x, y = build_data_cv("/content/PersonalityExtractor/essays_original_splitted.csv")
     build_new_data(x)

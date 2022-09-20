@@ -127,8 +127,8 @@ def get_mairesse_features(file_name):
 
 
 if __name__ == "__main__":
-    data_folder = "E:\Thesis\personality_detection-main\essays_200_max_split.csv"
-    mairesse_file = "E:\Thesis\personality_detection-main\mairesse.csv"
+    data_folder = "/content/PersonalityExtractor/essays_200_max_split.csv"
+    mairesse_file = "/content/PersonalityExtractor/mairesse.csv"
     print("loading data...")
     revs, vocab = build_data_cv(data_folder, cv=10, clean_string=True)
     num_words = pd.DataFrame(revs)["num_words"]
