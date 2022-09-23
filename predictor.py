@@ -168,7 +168,7 @@ def predict(text):
 
 if __name__ == "__main__":
     text_input = pd.read_csv('/content/PersonalityExtractor/DataSetCOMPLETE.csv')
-    txt_input = text_input['text'].iloc[1:5000]
+    txt_input = text_input['text'].iloc[5001:10000]
     li = []
     for i in txt_input:
       x = i
